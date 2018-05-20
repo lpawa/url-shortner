@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Url Shortner</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <script
+          src="https://code.jquery.com/jquery-3.3.1.js"
+          integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+          crossorigin="anonymous"></script>
+  <script src="javascripts/index.js"></script>
+</head>
+<body>
+<div id="Uparwala">
+<h1>
+  Shorten your links.
+</h1>
+
+<p class="lead">
+  Paste a long URL below and I'll shorten it for you.
+</p>
+<div class="notification" id= "notification ">
+
+</div>
+<form action="/shorten" method="post">
+  <div class="input-group btn-group">
+    <input type="text" class="form-control form-control-lg" name="url" placeholder="Your long URL here" id="url">
+
+      <span class="butt input-group-btn">
+    <button class="btn btn-outline-primary btn-lg" type="button" onclick="addList()"><i class="fas fa-plus-circle"></i> </button> &nbsp;
+      </span>
+    <span class="butt input-group-btn">
+      <button class="btn btn-outline-success btn-lg" type="button" onclick="sendUrls()">Go!</button>
+		</span>
+  </div>
+</form>
+
+<div>
+  <ul id="url-list"></ul>
+</div>
+</div>
+<div id="table_wrapper">
+  <table class="table table-striped">
+    <tr>
+      <th>Original URL</th>
+      <th>Created</th>
+      <th>Short URL</th>
+      <th>All Clicks</th>
+    </tr>
+      <% data.urls.forEach(function(drink) {
+        var shorturl = "http://localhost:3000/" + drink.code;
+      %>
+    <tr>
+      <td><%= drink.longurl %> </td>
+      <td><%= drink.time %></td>
+      <td><a href="<%= shorturl %>" target="_blank" onclick="window.location.reload(true)"> <%= shorturl %></a> </td>
+      <td> <%= drink.hits %> </td>
+    </tr>
+      <% }); %>
+  </table>
+
+</div>
+</body>
+</html>
