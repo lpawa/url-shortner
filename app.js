@@ -22,8 +22,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 
-app.use('/',express.static(path.join(__dirname, 'public')) );
-app.use('/users', usersRouter);
+//app.use('/',express.static(path.join(__dirname, 'public')) );
+app.use('/', usersRouter);
 
 app.post('/shorten', function (req, res) {
     // var url = req.body.url;
@@ -53,7 +53,7 @@ app.post('/shorten', function (req, res) {
         });
     //
     }
-    res.redirect('/users');
+    res.redirect('/');
     // var e = createError(404);
     // res.render('error', {message:"BAD REQUEST" , error:e});
     // if (typeof url === 'undefined') {
