@@ -11,8 +11,8 @@ const DB_PASS = "abc";
 const DB_NAME = "shorturl";
 const DB_PORT =  5432;
 
-const DATABASE_URL = (`postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}`);
-
+//const DATABASE_URL = (`postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}`);
+const DATABASE_URL = "postgres://nfkmbucsbwlzab:df2c1a8b64664f22b09b1a88cbcde50f45c33f126ac4caaf4349a3d54bc1e410@ec2-23-23-248-192.compute-1.amazonaws.com:5432/d3f6chalah6elb";
 const sequelize = new Sequelize(DATABASE_URL, {
     host: DB_HOST,
     dialect: 'postgres',
@@ -25,6 +25,9 @@ const sequelize = new Sequelize(DATABASE_URL, {
         min: 0,
         idle: 10000
     },
+    dialectOptions: {
+        ssl: true
+    }
 });
 
 
