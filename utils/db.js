@@ -84,7 +84,7 @@ module.exports = {
 
         const offset = (datas.page - 1) * datas.size;
         return URL.findAndCountAll({
-            order: [['createdat', 'ASC']],
+            order: [['createdat', 'DESC']],
             limit: datas.size,
             offset: offset
         }).then(data => {
