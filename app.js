@@ -24,46 +24,95 @@ app.use(cookieParser());
 
 //app.use('/',express.static(path.join(__dirname, 'public')) );
 app.use('/', usersRouter);
+app.post('/shortenMul',function (req,res) {
+    if(req.body.urls && req.body.urls.length>0){
+        var urls = JSON.parse(req.body.urls);
+        console.log(urls);
+        var data=[];
 
+        for(var i=0;i<urls.length;i++){
+            var url = urls[i];
+            if(validator.isURL(url)){
+                console.log("Valid URL");
+                var http = /^https?:\/\//i;
+                if (!http.test(url)) {
+                    url = 'http://' + url;
+                }
+                var model = {
+                    longurl:url,
+                    code:random.generate(7),
+                    time:new Date()
+                };
+                data.push(model);
+
+            }
+            else{
+                console.log("Invalid URL");
+                var e = createError(404);
+                res.render('error', {message:"BAD REQUEST" , error:e});
+                res.send(404);
+            }
+        }
+        console.log(data);
+        db.bulkAdd(data,function (response) {
+            console.log(response);
+            res.send(response);
+        },function (error) {
+            console.log(error);
+            res.render('error', {message:"BAD REQUEST",error:error});
+        })
+    }
+    else{
+        console.log("Invalid URL");
+        var e = createError(404);
+        res.render('error', {message:"BAD REQUEST" , error:e});
+        res.send(404);
+    }
+});
 app.post('/shorten', function (req, res) {
     // var url = req.body.url;
-    // if(validator.isURL(url)) {
-    //     var http = /^https?:\/\//i;
-    //     if (!http.test(url)) {
-    //         url = 'http://' + url;
-    //     }
 
-    console.log(JSON.parse(req.body.urls));
 
-    var urls = JSON.parse(req.body.urls);
-    console.log(urls);
-    for(var i=0;i<urls.length;i++){
-    // res.send("successful!");
-        console.log(urls[i]);
-        var url = urls[i];
-        var key = random.generate(7);
+    if(req.body.urls) {
+        var urls = JSON.parse(req.body.urls);
+        console.log(urls);
+        for (var i = 0; i < urls.length; i++) {
+            // res.send("successful!");
+            console.log(urls[i]);
+            var url = urls[i];
+            if(validator.isURL(url)) {
+                console.log("Valid URL");
+                var http = /^https?:\/\//i;
+                if (!http.test(url)) {
+                    url = 'http://' + url;
+                }
+                var key = random.generate(7);
 
-        console.log(url + "key:-" + key);
-        db.addUrl(key, url,function (shortcode, existed, longURL) {
-            console.log("URL added");
-            done(shortcode, existed, longURL);
-        }, function (error) {
-            console.log(error);
-            done(null)
-        });
-    //
+                console.log(url + "key:-" + key);
+                db.addUrl(key, url, function (shortcode, existed, longURL) {
+                    console.log("URL added");
+                    done(shortcode, existed, longURL);
+                }, function (error) {
+                    console.log(error);
+                    done(null)
+                });
+            }
+            else{
+                console.log("Invalid URL");
+                var e = createError(404);
+                res.render('error', {message:"BAD REQUEST" , error:e});
+                res.send(404);
+            }
+            //
+        }
+
+
+        //
+        // db.none("insert into entry(key, url) values($1, $2)", [key, url])
+        //     .then(function (data) {
+        //         res.render('shorten', { link: req.headers.origin + "/" + key });
+        //     });
     }
-    res.redirect('/');
-    // var e = createError(404);
-    // res.render('error', {message:"BAD REQUEST" , error:e});
-    // if (typeof url === 'undefined') {
-    //     res.redirect('/');
-    // }
-    //
-    // db.none("insert into entry(key, url) values($1, $2)", [key, url])
-    //     .then(function (data) {
-    //         res.render('shorten', { link: req.headers.origin + "/" + key });
-    //     });
 });
 
 app.get('/:shortcode', function (req, res,next) {

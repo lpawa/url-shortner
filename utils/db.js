@@ -33,7 +33,7 @@ const sequelize = new Sequelize(DATABASE_URL, {
 
 const URL = sequelize.define('url', {
     code: {type: Sequelize.STRING,primaryKey:true },
-    longurl: {type: Sequelize.STRING},
+    longurl: {type: Sequelize.STRING, unique:true},
     hits: {type: Sequelize.INTEGER, defaultValue: 0},
     time: {type: Sequelize.DATE}
 });
@@ -57,6 +57,13 @@ module.exports = {
             })
 
 
+    },
+    bulkAdd: function (array,done,failed) {
+        URL.bulkCreate(array).then(function (newAdd) {
+            done(newAdd);
+        }).catch(function (error) {
+            failed(error);
+        })
     },
     fetchUrl: function (code, done, failed) {
         URL.findById(code).then(function (url) {
