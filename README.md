@@ -24,6 +24,8 @@ Frontend - HTML + CSS
 
 API's - 
 
+GET /?page=1 - To get the URL stats for the 1st page of the table
+
 POST /shortenMultiple - Use a Bulk Sequelize query to create entries for an array of longURLs
 
 
