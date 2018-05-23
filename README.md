@@ -3,7 +3,7 @@ This is a WebApp for creating a URL shortner.
 In order to install it
 
 
-Run 'npm inastall' after downloading the repo. to install the dependencies
+Run 'npm install' after downloading the repo. to install the dependencies
 
 
 To start the server on localhost:3000
