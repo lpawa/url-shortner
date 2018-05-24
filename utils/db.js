@@ -51,6 +51,8 @@ module.exports = {
                     longurl: longURL
                 }
 
+            }).then(function (response) {
+                done(response);
             }).catch(function (error) {
                 console.log(error);
                 failed(error);
@@ -91,7 +93,7 @@ module.exports = {
 
         const offset = (datas.page - 1) * datas.size;
         return URL.findAndCountAll({
-            order: [['createdat', 'DESC']],
+            order: [['createdat', 'DESC'],['longurl' ,'ASC']],
             limit: datas.size,
             offset: offset
         }).then(data => {

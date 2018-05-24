@@ -50,13 +50,14 @@ app.post('/shortenMul',function (req,res) {
                 console.log("Invalid URL");
                 var e = createError(404);
                 res.render('error', {message:"BAD REQUEST" , error:e});
-                res.send(404);
+                //res.send(404);
             }
         }
         console.log(data);
         db.bulkAdd(data,function (response) {
             console.log(response);
-            res.send(response);
+            res.redirect("/");
+            //res.send(response);
         },function (error) {
             console.log(error);
             res.render('error', {message:"BAD REQUEST",error:error});
@@ -66,7 +67,7 @@ app.post('/shortenMul',function (req,res) {
         console.log("Invalid URL");
         var e = createError(404);
         res.render('error', {message:"BAD REQUEST" , error:e});
-        res.send(404);
+        //res.send(404);
     }
 });
 app.post('/shorten', function (req, res) {
@@ -76,6 +77,33 @@ app.post('/shorten', function (req, res) {
     if(req.body.urls) {
         var urls = JSON.parse(req.body.urls);
         console.log(urls);
+        if(urls.length==1){
+            var url = urls[0];
+            if(validator.isURL(url)) {
+                console.log("Valid URL");
+                var http = /^https?:\/\//i;
+                if (!http.test(url)) {
+                    url = 'http://' + url;
+                }
+                var key = random.generate(7);
+
+                console.log(url + "key:-" + key);
+                db.addUrl(key, url, function (shortcode, existed, longURL) {
+                    console.log("URL added");
+                    res.redirect("/")
+                }, function (error) {
+                    console.log(error);
+                    res.render('error', {message:"BAD REQUEST" , error:error});
+
+                });
+            }
+            else{
+                console.log("Invalid URL");
+                var e = createError(404);
+                res.render('error', {message:"BAD REQUEST" , error:e});
+
+            }
+        }
         for (var i = 0; i < urls.length; i++) {
             // res.send("successful!");
             console.log(urls[i]);
@@ -91,17 +119,18 @@ app.post('/shorten', function (req, res) {
                 console.log(url + "key:-" + key);
                 db.addUrl(key, url, function (shortcode, existed, longURL) {
                     console.log("URL added");
-                    done(shortcode, existed, longURL);
+                    res.redirect("/")
                 }, function (error) {
                     console.log(error);
-                    done(null)
+                    res.render('error', {message:"BAD REQUEST" , error:error});
+
                 });
             }
             else{
                 console.log("Invalid URL");
                 var e = createError(404);
                 res.render('error', {message:"BAD REQUEST" , error:e});
-                res.send(404);
+
             }
             //
         }
